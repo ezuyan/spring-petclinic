@@ -74,15 +74,5 @@ pipeline {
             }
         }
         
-        stage('Docker Image Upload') {
-            steps {
-                echo 'Docker Image Upload'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploy'
-            }
-        }
     }
 }

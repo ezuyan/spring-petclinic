@@ -43,7 +43,7 @@ pipeline {
                 dir("${env.WORKSPACE}") {
                     sh """
                         docker build -t ezuyan/spring-petclinic:$BUILD_NUMBER .
-                        docker tag ezuyan/spring-petclinic:$BUILD_NUMBER ezuayn/spring-petclinc:latest
+                        docker tag ezuyan/spring-petclinic:$BUILD_NUMBER ezuyan/spring-petclinc:latest
                     """
                 }
                 
@@ -60,7 +60,7 @@ pipeline {
         stage('Docker Image Push') {
             steps {
                 // docker hub에 이미지 업로드
-                sh 'docker push ezuayn/spring-petclinc:latest'
+                sh 'docker push ezuyan/spring-petclinc:latest'
             }
         }
 
@@ -68,8 +68,8 @@ pipeline {
             steps {
                 // docker image 삭제
                 sh """
-                docker rmi ezuayn/spring-petclinc:$BUILD_NUMBER
-                docker rmi ezuayn/spring-petclinc:latest
+                docker rmi ezuyan/spring-petclinc:$BUILD_NUMBER
+                docker rmi ezuyan/spring-petclinc:latest
                 """
             }
         }

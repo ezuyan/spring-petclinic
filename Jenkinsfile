@@ -5,15 +5,15 @@ pipeline {
         jdk 'JDK17'
         maven 'M3'
     }
-    environment {
+    environment { 
         // jenkins에 등록해 놓은 docker hub credentials 이름
-        DOCKERHUB_CREDENTIALS = credentials('Dockerhub-jenkins')
+        DOCKERHUB_CREDENTIALS = credentials('Dockerhub-jenkins') 
     }
-    
+        
     stages {
-        stage('Git clone') {
+        stage('Git Clone') {
             steps {
-                echo 'Git clone'
+                echo 'Git Clone'
                 git url: 'https://github.com/ezuyan/spring-petclinic.git',
                 branch: 'efficient-webjars'
             }
@@ -26,6 +26,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Maven Build') {
             steps {
                 echo 'Maven Build'
@@ -37,15 +38,16 @@ pipeline {
                 }
             }
         }
+        
         stage('Docker Image Build') {
             steps {
-                echo 'Docker Image build'
+                echo 'Docker Image build'                
                 dir("${env.WORKSPACE}") {
                     sh """
                     docker build -t ezuyan/spring-petclinic:$BUILD_NUMBER .
-                    docker tag ezuyan/spring-petclinic:$BUILD_NUMBER ezuyan/spring-petclinc:latest
+                    docker tag ezuyan/spring-petclinic:$BUILD_NUMBER ezuyan/spring-petclinic:latest
                     """
-                }                
+                }
             }
         }
 
@@ -54,24 +56,27 @@ pipeline {
                 // docker hub 로그인
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
-        }    
+        }
 
-        stage('Docker Image Push') {
+        stage ('Docker Image Push') {
             steps {
                 // docker hub에 이미지 업로드
-                sh 'docker push ezuyan/spring-petclinc:latest'
+                sh 'docker push ezuyan/spring-petclinic:latest'
             }
         }
 
-        stage('Docker Image Remove') {
+        stage ('Docker Image Remove') {
             steps {
                 // docker image 삭제
                 sh """
-                docker rmi ezuyan/spring-petclinc:$BUILD_NUMBER
-                docker rmi ezuyan/spring-petclinc:latest
+                docker rmi ezuyan/spring-petclinic:$BUILD_NUMBER
+                docker rmi ezuyan/spring-petclinic:latest
                 """
             }
         }
+
         
+
     }
 }
+         
